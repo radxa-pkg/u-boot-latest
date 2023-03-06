@@ -1,0 +1,25 @@
+name: Build
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+      - 'VERSION'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Get revision
+        run: |
+          VERSION=$(cat VERSION)
+          echo "revision=${VERSION#*-}" >> $GITHUB_ENV
+      - name: Build
+        uses: radxa-repo/bsp@main
+        with:
+          target: u-boot
+          edition: latest
+          revision: ${{ env.revision }}
