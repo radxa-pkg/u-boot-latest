@@ -51,6 +51,6 @@ jobs:
         if: failure()
         uses: author/action-rollback@stable
         env:
-          GITHUB_TOKEN: ${{ inputs.github-token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          release_id: ${{ inputs.release-id }}
+          release_id: ${{ steps.release.outputs.id }}
