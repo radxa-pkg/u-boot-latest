@@ -47,10 +47,3 @@ jobs:
         with:
           test-repo: true
           token: ${{ secrets.RADXA_APT_TEST_REPO_TOKEN }}
-      - name: Rollback release
-        if: failure()
-        uses: author/action-rollback@stable
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          release_id: ${{ steps.release.outputs.id }}
