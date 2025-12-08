@@ -1,0 +1,9 @@
+[submodule "src"]
+	path = src
+	url = https://github.com/u-boot/u-boot.git
+[submodule "atf"]
+	path = atf
+	url = https://github.com/ARM-software/arm-trusted-firmware.git
+[submodule "fip"]
+	path = fip
+	url = https://github.com/radxa/fip.git

@@ -1,0 +1,52 @@
+UBOOT_PRODUCTS := radxa-zero radxa-zero-2pro
+
+#
+# Common supporting targets
+#
+
+clean: clean_atf clean_fip
+
+.PHONY: clean_atf
+clean_atf:
+	$(MAKE) -j$(shell nproc) -C atf distclean
+
+.PHONY: clean_fip
+clean_fip:
+	$(MAKE) -j$(shell nproc) -C fip distclean
+
+atf/build/%/release/bl31/bl31.elf:
+	$(MAKE) -j$(shell nproc) -C atf CROSS_COMPILE=$(CROSS_COMPILE) PLAT=$*
+
+#
+# Device build targets
+#
+
+.PHONY: radxa-zero_defconfig
+radxa-zero_defconfig: clean_config
+	$(UMAKE) $@
+
+.PHONY: radxa-zero_build
+radxa-zero_build: radxa-zero_defconfig
+	$(UMAKE)
+	$(MAKE) -C fip fip UBOOT_BIN=../src/u-boot.bin BOARD=radxa-zero
+
+.PHONY: radxa-zero
+radxa-zero: radxa-zero_build
+	mkdir -p out/$@
+	cp fip/$@/u-boot.bin fip/$@/u-boot.bin.sd.bin out/$@
+	cp setup/u-boot_setup-amlogic.sh out/$@/setup.sh
+
+.PHONY: radxa-zero-2pro_defconfig
+radxa-zero-2pro_defconfig: clean_config
+	$(UMAKE) radxa-zero2_defconfig
+
+.PHONY: radxa-zero-2pro_build
+radxa-zero-2pro_build: radxa-zero-2pro_defconfig
+	$(UMAKE)
+	$(MAKE) -C fip fip UBOOT_BIN=../src/u-boot.bin BOARD=radxa-zero-2pro
+
+.PHONY: radxa-zero-2pro
+radxa-zero-2pro: radxa-zero-2pro_build
+	mkdir -p out/$@
+	cp fip/$@/u-boot.bin fip/$@/u-boot.bin.sd.bin out/$@
+	cp setup/u-boot_setup-amlogic.sh out/$@/setup.sh

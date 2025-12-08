@@ -1,0 +1,50 @@
+Source: u-boot-latest
+Maintainer: "Radxa Computer Co., Ltd" <dev@radxa.com>
+Section: admin
+Priority: standard
+Standards-Version: 4.6.0
+Build-Depends: debhelper (>=12~),
+               devscripts,
+               lintian,
+               dh-exec,
+               flex,
+               bison,
+               python3-setuptools,
+               swig,
+               python3-dev,
+               libgnutls28-dev,
+               python3-pyelftools,
+               libncurses-dev,
+               crossbuild-essential-armhf [!armhf],
+               crossbuild-essential-armel [!armel],
+               xxd,
+               bc,
+               lib32stdc++6 [!i386],
+               lib32z1 [!i386],
+               dos2unix,
+
+Package: u-boot-latest
+Architecture: all
+Section: admin
+Priority: optional
+Depends: ${misc:Depends},
+Description: U-Boot based on latest
+ This package provides the prebuilt U-Boot based on latest.
+
+Package: u-boot-radxa-zero
+Architecture: all
+Depends: u-boot-latest,
+         ${misc:Depends},
+Section: admin
+Priority: optional
+Description: Radxa U-Boot meta-package for Radxa ZERO
+ This package provides the prebuilt U-Boot for Radxa ZERO.
+
+Package: u-boot-radxa-zero-2pro
+Architecture: all
+Depends: u-boot-latest,
+         ${misc:Depends},
+Section: admin
+Priority: optional
+Description: Radxa U-Boot meta-package for Radxa ZERO 2 PRO
+ This package provides the prebuilt U-Boot for Radxa ZERO 2 PRO.
