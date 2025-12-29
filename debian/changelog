@@ -1,5 +1,12 @@
-u-boot-latest (2025.10-1) UNRELEASED; urgency=medium
+u-boot-latest (2025.10-1) unstable; urgency=medium
 
+  [ "Radxa Computer Co., Ltd" ]
   * Add initial Debian packaging support
 
- -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Thu, 01 Jan 1970 08:00:00 +0800
+  [ dependabot[bot] ]
+  * Bump actions/download-artifact from 6 to 7
+
+  [ CodeChenL ]
+  * feat: add pkg.conf.template
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Mon, 29 Dec 2025 09:18:51 +0000
