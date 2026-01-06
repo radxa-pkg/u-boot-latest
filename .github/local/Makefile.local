@@ -1,4 +1,4 @@
-UBOOT_PRODUCTS := radxa-zero radxa-zero-2pro
+UBOOT_PRODUCTS := radxa-zero radxa-zero-2pro rock-pi-e rock-pi-s rock-s0
 
 #
 # Common supporting targets
@@ -16,6 +16,15 @@ clean_fip:
 
 atf/build/%/release/bl31/bl31.elf:
 	$(MAKE) -j$(shell nproc) -C atf CROSS_COMPILE=$(CROSS_COMPILE) PLAT=$*
+
+.PHONY: enable_rockchip_spi_image
+enable_rockchip_spi_image:
+	cd src && ./scripts/config --enable CONFIG_ROCKCHIP_SPI_IMAGE
+	cd src && ./scripts/config --enable CONFIG_SPL_SPI
+	cd src && ./scripts/config --enable CONFIG_SPL_SPI_FLASH_SUPPORT
+	cd src && ./scripts/config --enable CONFIG_SPL_SPI_LOAD
+	cd src && ./scripts/config --set-val CONFIG_SYS_SPI_U_BOOT_OFFS 0x60000
+	$(UMAKE) olddefconfig
 
 #
 # Device build targets
@@ -50,3 +59,63 @@ radxa-zero-2pro: radxa-zero-2pro_build
 	mkdir -p out/$@
 	cp fip/$@/u-boot.bin fip/$@/u-boot.bin.sd.bin out/$@
 	cp setup/u-boot_setup-amlogic.sh out/$@/setup.sh
+
+.PHONY: rock-pi-e-rk3328_defconfig
+rock-pi-e-rk3328_defconfig: clean_config
+	$(UMAKE) rock-pi-e-rk3328_defconfig
+	cd src && ./scripts/config --enable CONFIG_ROCKCHIP_EXTERNAL_TPL
+	$(UMAKE) olddefconfig
+
+.PHONY: rock-pi-e_build
+rock-pi-e_build: rock-pi-e-rk3328_defconfig enable_rockchip_spi_image
+	rm -rf rkbin/*_loader_*.bin src/u-boot-rockchip*.bin
+	$(UMAKE) ROCKCHIP_TPL=../rkbin/bin/rk33/rk3328_ddr_333MHz_v1.21.bin BL31=../rkbin/bin/rk33/rk322xh_bl31_v1.49.elf
+	sed -i "s|FlashBoot=.*|FlashBoot=../src/spl/u-boot-spl.bin|g" "rkbin/RKBOOT/RK3328MINIALL.ini"
+	cd rkbin && tools/boot_merger "RKBOOT/RK3328MINIALL.ini"
+
+.PHONY: rock-pi-e
+rock-pi-e: rock-pi-e_build
+	mkdir -p out/$@
+	cp src/u-boot-rockchip*.bin out/$@
+	cp rkbin/*_loader_*.bin "out/$@/rkboot.bin"
+	cp setup/u-boot_setup-rockchip.sh out/$@/setup.sh
+
+.PHONY: rock-s0-rk3308_defconfig
+rock-s0-rk3308_defconfig: clean_config
+	$(UMAKE) rock-s0-rk3308_defconfig
+	cd src && ./scripts/config --enable CONFIG_ROCKCHIP_EXTERNAL_TPL
+	$(UMAKE) olddefconfig
+
+.PHONY: rock-s0_build
+rock-s0_build: rock-s0-rk3308_defconfig
+	rm -rf rkbin/*_loader_*.bin src/u-boot-rockchip*.bin
+	$(UMAKE) ROCKCHIP_TPL=../rkbin/bin/rk33/rk3308_ddr_589MHz_uart0_m0_v2.10.bin BL31=../rkbin/bin/rk33/rk3308_bl31_v2.26.elf
+	sed -i "s|FlashBoot=.*|FlashBoot=../src/spl/u-boot-spl.bin|g" "rkbin/RKBOOT/RK3308MINIALL_UART0.ini"
+	cd rkbin && tools/boot_merger "RKBOOT/RK3308MINIALL_UART0.ini"
+
+.PHONY: rock-s0
+rock-s0: rock-s0_build
+	mkdir -p out/$@
+	cp src/u-boot-rockchip*.bin out/$@
+	cp rkbin/*_loader_*.bin "out/$@/rkboot.bin"
+	cp setup/u-boot_setup-rockchip.sh out/$@/setup.sh
+
+.PHONY: rock-pi-s-rk3308_defconfig
+rock-pi-s-rk3308_defconfig: clean_config
+	$(UMAKE) rock-pi-s-rk3308_defconfig
+	cd src && ./scripts/config --enable CONFIG_ROCKCHIP_EXTERNAL_TPL
+	$(UMAKE) olddefconfig
+
+.PHONY: rock-pi-s_build
+rock-pi-s_build: rock-pi-s-rk3308_defconfig
+	rm -rf rkbin/*_loader_*.bin src/u-boot-rockchip*.bin
+	$(UMAKE) ROCKCHIP_TPL=../rkbin/bin/rk33/rk3308_ddr_589MHz_uart0_m0_v2.10.bin BL31=../rkbin/bin/rk33/rk3308_bl31_v2.26.elf
+	sed -i "s|FlashBoot=.*|FlashBoot=../src/spl/u-boot-spl.bin|g" "rkbin/RKBOOT/RK3308MINIALL_UART0.ini"
+	cd rkbin && tools/boot_merger "RKBOOT/RK3308MINIALL_UART0.ini"
+
+.PHONY: rock-pi-s
+rock-pi-s: rock-pi-s_build
+	mkdir -p out/$@
+	cp src/u-boot-rockchip*.bin out/$@
+	cp rkbin/*_loader_*.bin "out/$@/rkboot.bin"
+	cp setup/u-boot_setup-rockchip.sh out/$@/setup.sh
