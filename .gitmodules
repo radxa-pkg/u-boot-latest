@@ -7,3 +7,6 @@
 [submodule "fip"]
 	path = fip
 	url = https://github.com/radxa/fip.git
+[submodule "rkbin"]
+	path = rkbin
+	url = https://github.com/radxa/rkbin

@@ -48,3 +48,30 @@ Section: admin
 Priority: optional
 Description: Radxa U-Boot meta-package for Radxa ZERO 2 PRO
  This package provides the prebuilt U-Boot for Radxa ZERO 2 PRO.
+
+Package: u-boot-rock-pi-e
+Architecture: all
+Depends: u-boot-latest,
+         ${misc:Depends},
+Section: admin
+Priority: optional
+Description: Radxa U-Boot meta-package for ROCK Pi E
+ This package provides the prebuilt U-Boot for Radxa ROCK Pi E.
+
+Package: u-boot-rock-pi-s
+Architecture: all
+Depends: u-boot-latest,
+         ${misc:Depends},
+Section: admin
+Priority: optional
+Description: Radxa U-Boot meta-package for ROCK Pi S
+ This package provides the prebuilt U-Boot for ROCK Pi S.
+
+Package: u-boot-rock-s0
+Architecture: all
+Depends: u-boot-latest,
+         ${misc:Depends},
+Section: admin
+Priority: optional
+Description: Radxa U-Boot meta-package for ROCK S0
+ This package provides the prebuilt U-Boot for ROCK S0.
