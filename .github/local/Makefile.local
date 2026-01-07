@@ -72,9 +72,10 @@ radxa-zero-2pro: radxa-zero-2pro_build
 .PHONY: rock-pi-e-rk3328_defconfig
 rock-pi-e-rk3328_defconfig: clean_config
 	$(UMAKE) rock-pi-e-rk3328_defconfig
+	$(MAKE) enable_rockchip_spi_image enable_rockchip_external_tpl
 
 .PHONY: rock-pi-e_build
-rock-pi-e_build: rock-pi-e-rk3328_defconfig enable_rockchip_spi_image enable_rockchip_external_tpl
+rock-pi-e_build: rock-pi-e-rk3328_defconfig
 	$(UMAKE) ROCKCHIP_TPL=$(call find_latest_file,rkbin/bin/rk33,rk3328_ddr_333MHz_v,.bin) \
 	BL31=$(call find_latest_file,rkbin/bin/rk33,rk322xh_bl31_v,.elf)
 	sed -i "s|FlashBoot=.*|FlashBoot=../src/spl/u-boot-spl.bin|g" "rkbin/RKBOOT/RK3328MINIALL.ini"
@@ -90,9 +91,10 @@ rock-pi-e: rock-pi-e_build
 .PHONY: rock-s0-rk3308_defconfig
 rock-s0-rk3308_defconfig: clean_config
 	$(UMAKE) rock-s0-rk3308_defconfig
+	$(MAKE) enable_rockchip_external_tpl
 
 .PHONY: rock-s0_build
-rock-s0_build: rock-s0-rk3308_defconfig enable_rockchip_external_tpl
+rock-s0_build: rock-s0-rk3308_defconfig
 	$(UMAKE) ROCKCHIP_TPL=$(call find_latest_file,rkbin/bin/rk33,rk3308_ddr_589MHz_uart0_m0_v,.bin) \
 	BL31=$(call find_latest_file,rkbin/bin/rk33,rk3308_bl31_v,.elf)
 	sed -i "s|FlashBoot=.*|FlashBoot=../src/spl/u-boot-spl.bin|g" "rkbin/RKBOOT/RK3308MINIALL_UART0.ini"
@@ -108,9 +110,10 @@ rock-s0: rock-s0_build
 .PHONY: rock-pi-s-rk3308_defconfig
 rock-pi-s-rk3308_defconfig: clean_config
 	$(UMAKE) rock-pi-s-rk3308_defconfig
+	$(MAKE) enable_rockchip_external_tpl
 
 .PHONY: rock-pi-s_build
-rock-pi-s_build: rock-pi-s-rk3308_defconfig enable_rockchip_external_tpl
+rock-pi-s_build: rock-pi-s-rk3308_defconfig
 	$(UMAKE) ROCKCHIP_TPL=$(call find_latest_file,rkbin/bin/rk33,rk3308_ddr_589MHz_uart0_m0_v,.bin) \
 	BL31=$(call find_latest_file,rkbin/bin/rk33,rk3308_bl31_v,.elf)
 	sed -i "s|FlashBoot=.*|FlashBoot=../src/spl/u-boot-spl.bin|g" "rkbin/RKBOOT/RK3308MINIALL_UART0.ini"
