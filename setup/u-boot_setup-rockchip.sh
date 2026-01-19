@@ -174,7 +174,7 @@ update_bootloader() {
     update_idbloader "$DEVICE"
     if [[ -f "$SCRIPT_DIR/u-boot-rockchip.bin" ]]
     then
-        dd if="$SCRIPT_DIR/u-boot-rockchip.bin" of=$DEVICE bs=512 seek=64
+        dd conv=notrunc,fsync if="$SCRIPT_DIR/u-boot-rockchip.bin" of=$DEVICE bs=512 seek=64
     elif [[ -f "$SCRIPT_DIR/u-boot.itb" ]]
     then
         dd conv=notrunc,fsync if="$SCRIPT_DIR/u-boot.itb" of=$DEVICE bs=512 seek=16384
