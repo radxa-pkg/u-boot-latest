@@ -7,16 +7,16 @@
       "bullseye-test",
       "bookworm",
       "bookworm-test",
-      "trixie",
-      "trixie-test",
       "sid",
       "sid-test",
       "focal",
       "focal-test",
       "jammy",
       "jammy-test",
-      "noble",
-      "noble-test"
+      "s905y2-trixie",
+      "s905y2-trixie-test",
+      "a311d-trixie",
+      "a311d-trixie-test"
     ]
   }
 }
