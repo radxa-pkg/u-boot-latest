@@ -1,0 +1,33 @@
+diff --git a/src/boot/pxe_utils.c b/src/boot/pxe_utils.c
+index eb4d7723481..57d20782fe1 100644
+--- a/src/boot/pxe_utils.c
++++ b/src/boot/pxe_utils.c
+@@ -662,6 +662,28 @@ static int label_boot(struct pxe_context *ctx, struct pxe_label *label)
+ 				"fdt_addr_r",
+ 				 (enum bootflow_img_t)IH_TYPE_FLATDT, NULL);
+ 
++			if (err < 0 && label->fdtdir && env_get("fdtfile")) {
++				if (!strcmp(env_get("fdtfile"), "amlogic/meson-g12b-radxa-zero2.dtb")) {
++					printf("Retry with downstream Radxa DTB name.\n");
++
++					len = strlen(fdtfile) + 4 + 1;
++					fdtfilefree = malloc(len);
++					if (!fdtfilefree) {
++						printf("malloc fail (FDT filename)\n");
++						goto cleanup;
++					}
++
++					strcpy(fdtfilefree, fdtfile);
++					strcpy(fdtfilefree + len - 1 - 9, "-2pro.dtb");
++					free(fdtfile);
++					fdtfile = fdtfilefree;
++
++					err = get_relfile_envaddr(ctx, fdtfile,
++						"fdt_addr_r",
++						(enum bootflow_img_t)IH_TYPE_FLATDT, NULL);
++				}
++			}
++
+ 			free(fdtfilefree);
+ 			if (err < 0) {
+ 				bootm_argv[3] = NULL;
