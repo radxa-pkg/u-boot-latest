@@ -1,3 +1,12 @@
+u-boot-latest (2025.10-3) unstable; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * fix: incorrect dd call caused generated system image to be broken
+  * fix: limit package release to related SoC repo
+  * fix: maintain compatibility with old 6.1 kernel
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Thu, 29 Jan 2026 11:17:18 +0000
+
 u-boot-latest (2025.10-2) unstable; urgency=medium
 
   [ Jiali Chen ]
