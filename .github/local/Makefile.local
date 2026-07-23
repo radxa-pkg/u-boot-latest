@@ -1,4 +1,4 @@
-UBOOT_PRODUCTS := radxa-zero radxa-zero-2pro rock-pi-e rock-pi-s rock-s0
+UBOOT_PRODUCTS := radxa-zero radxa-zero-2pro rock-pi-e
 
 define find_latest_file
 $(shell find $(1) -name "$(2)*$(3)" 2>/dev/null | sort -Vr | head -1 | xargs realpath)
@@ -83,44 +83,6 @@ rock-pi-e_build: rock-pi-e_defconfig
 
 .PHONY: rock-pi-e
 rock-pi-e: rock-pi-e_build
-	mkdir -p out/$@
-	mv src/u-boot-rockchip*.bin out/$@
-	mv rkbin/*_loader_*.bin "out/$@/rkboot.bin"
-	cp setup/u-boot_setup-rockchip.sh out/$@/setup.sh
-
-.PHONY: rock-s0_defconfig
-rock-s0_defconfig: clean_config
-	$(UMAKE) rock-s0-rk3308_defconfig
-	$(MAKE) enable_rockchip_external_tpl
-
-.PHONY: rock-s0_build
-rock-s0_build: rock-s0_defconfig
-	$(UMAKE) ROCKCHIP_TPL=$(call find_latest_file,rkbin/bin/rk33,rk3308_ddr_589MHz_uart0_m0_v,.bin) \
-	BL31=$(call find_latest_file,rkbin/bin/rk33,rk3308_bl31_v,.elf)
-	sed -i "s|FlashBoot=.*|FlashBoot=../src/spl/u-boot-spl.bin|g" "rkbin/RKBOOT/RK3308MINIALL_UART0.ini"
-	cd rkbin && tools/boot_merger "RKBOOT/RK3308MINIALL_UART0.ini"
-
-.PHONY: rock-s0
-rock-s0: rock-s0_build
-	mkdir -p out/$@
-	mv src/u-boot-rockchip*.bin out/$@
-	mv rkbin/*_loader_*.bin "out/$@/rkboot.bin"
-	cp setup/u-boot_setup-rockchip.sh out/$@/setup.sh
-
-.PHONY: rock-pi-s_defconfig
-rock-pi-s_defconfig: clean_config
-	$(UMAKE) rock-pi-s-rk3308_defconfig
-	$(MAKE) enable_rockchip_external_tpl
-
-.PHONY: rock-pi-s_build
-rock-pi-s_build: rock-pi-s_defconfig
-	$(UMAKE) ROCKCHIP_TPL=$(call find_latest_file,rkbin/bin/rk33,rk3308_ddr_589MHz_uart0_m0_v,.bin) \
-	BL31=$(call find_latest_file,rkbin/bin/rk33,rk3308_bl31_v,.elf)
-	sed -i "s|FlashBoot=.*|FlashBoot=../src/spl/u-boot-spl.bin|g" "rkbin/RKBOOT/RK3308MINIALL_UART0.ini"
-	cd rkbin && tools/boot_merger "RKBOOT/RK3308MINIALL_UART0.ini"
-
-.PHONY: rock-pi-s
-rock-pi-s: rock-pi-s_build
 	mkdir -p out/$@
 	mv src/u-boot-rockchip*.bin out/$@
 	mv rkbin/*_loader_*.bin "out/$@/rkboot.bin"
